@@ -7,17 +7,72 @@ const Ticket = require("../models/ticketModel");
 // @route  GET /api/tickets/
 // @access Private
 const getTickets = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: "getTickets" });
+  // Get user using the id in the JWT
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  const tickets = await Ticket.find({ user: req.user.id });
+
+  res.status(200).json(tickets);
+});
+
+// @desc   Get user ticket
+// @route  GET /api/tickets/:id
+// @access Private
+const getTicket = asyncHandler(async (req, res) => {
+  // Get user using the id in the JWT
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  const ticket = await Ticket.findById(req.params.id);
+
+  if (!ticket) {
+    res.status(404);
+    throw new Error("Ticket not found");
+  }
+  if (ticket.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error("Not Authourized");
+  }
+  res.status(200).json(ticket);
 });
 
 // @desc   Create user tickets
 // @route  POST /api/tickets/
 // @access Private
 const createTickets = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: "createTickets" });
+  const { product, description } = req.body;
+
+  if (!product || !description) {
+    res.status(400);
+    throw new Error("Please add a product and description");
+  }
+
+  // Get user using the id in the JWT
+  const user = await User.findById(req.user.id);
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  const ticket = await Ticket.create({
+    product,
+    description,
+    user: req.user.id,
+    status: "new",
+  });
+
+  res.status(200).json(ticket);
 });
 
 module.exports = {
   getTickets,
   createTickets,
+  getTicket,
 };
