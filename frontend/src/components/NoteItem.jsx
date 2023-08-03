@@ -16,7 +16,7 @@ function NoteItem({ note }) {
       </h4>
       <p>{note.text}</p>
       <div className="note-date">
-        {new Date(note.createAt).toLocaleString("en-US")}
+        {new Date(note.createdAt).toLocaleString("en-US")}
       </div>
     </div>
   );
