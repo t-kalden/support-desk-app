@@ -38,7 +38,9 @@ function NewTicket() {
     dispatch(createTicket({ product, description }));
   };
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <>
