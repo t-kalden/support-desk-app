@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getTicket, closeTicket } from "../features/tickets/ticketSlice";
+import {
+  getTicket,
+  closeTicket,
+  reopenTicket,
+} from "../features/tickets/ticketSlice";
 import {
   getNotes,
   createNote,
@@ -58,7 +62,14 @@ function Ticket() {
   // Close ticket
   const onTicketClose = () => {
     dispatch(closeTicket(ticketId));
-    toast.success("Ticket Closed");
+    toast.success("This ticket is now closed");
+    navigate("/tickets");
+  };
+
+  // Reopen Ticket
+  const onTicketReopen = () => {
+    dispatch(reopenTicket(ticketId));
+    toast.success("This ticket has been reopened ");
     navigate("/tickets");
   };
 
@@ -146,9 +157,17 @@ function Ticket() {
         {notes.map((note) => (
           <NoteItem key={note._id} note={note} />
         ))}
-        {ticket.status !== "closed" && (
+
+        {ticket.status !== "closed" ? (
           <button className="btn btn-block btn-danger" onClick={onTicketClose}>
             Close Ticket
+          </button>
+        ) : (
+          <button
+            className="btn btn-block btn-success"
+            onClick={onTicketReopen}
+          >
+            Reopen Ticket
           </button>
         )}
       </div>

@@ -175,7 +175,10 @@ h3 {
   background: darkred;
   border: none;
 }
-
+.btn-success {
+  background: darkgreen;
+  border: none;
+}
 .btn-back {
   width: 150px;
   margin-bottom: 20px;
