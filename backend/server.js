@@ -23,7 +23,7 @@ app.use("/api/tickets", require("./routes/ticketRoutes"));
 
 // Server
 if (process.env.NODE_ENV === "production") {
-  // set build folder as statid
+  // set build folder as static
   app.use(express.static(path.join(__dirname, "../frontend/build")));
 
   app.get("*", (req, res) =>
