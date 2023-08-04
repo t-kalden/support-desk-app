@@ -23,15 +23,17 @@ app.use("/api/tickets", require("./routes/ticketRoutes"));
 
 // Server
 if (process.env.NODE_ENV === "production") {
-  // set build folder as static
-  app.use(express.static(path.join(__dirname, "../frontend/build")));
-
-  app.get("*", (req, res) =>
-    res.sendFile(__dirname, "../", "frontend", "build", "index.html")
-  );
-} else {
-  app.get("/", (req, res) => {
-    res.status(200).json({ message: "Welcome to the Support Desk API" });
+  const path = require("path");
+  app.use(express.static(path.resolve(__dirname, "client", "build")));
+  app.get("*", (req, res) => {
+    res.sendFile(
+      path.resolve(__dirname, "client", "build", "index.html"),
+      function (err) {
+        if (err) {
+          res.status(500).send(err);
+        }
+      }
+    );
   });
 }
 
